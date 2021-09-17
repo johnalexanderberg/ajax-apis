@@ -1,23 +1,30 @@
-const quoteTag = document.querySelector('h1')
+const quoteTag = document.querySelector(".quote");
+const authorTag = document.querySelector(".author");
+const reloadButton = document.querySelector(".reload");
 
-let data = []
+let data = [];
 
 let randomQuote;
 
-
-fetch('https://api.superhi.com/api/test/quotes/')
-    .then(response => response.json())
-    .then(jsonData => {
-        data = jsonData
-        getQuote()
-    })
-
 const getQuote = function () {
+  if (data.length > 0) {
+    const randomNumber = Math.floor(Math.random() * data.length);
+    randomQuote = data[randomNumber];
+  }
 
-    if (data.length > 0) {
-        const randomNumber = Math.floor(Math.random() * data.length)
-        const randomQuote = data[randomNumber]
-    }
+  quoteTag.innerHTML = randomQuote.quote;
+  authorTag.innerHTML = randomQuote.author;
+};
 
-    quoteTag.innerHTML = randomQuote.quote;
+fetch("https://api.superhi.com/api/test/quotes/")
+  .then((response) => response.json())
+  .then((jsonData) => {
+    data = jsonData;
+    getQuote();
+  });
+
+function handleClick() {
+  getQuote();
 }
+
+reloadButton.addEventListener("click", handleClick);
